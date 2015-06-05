@@ -6,3 +6,5 @@ RUN curl -L http://download.slicer.org/bitstream/263262 > Slicer-4.4.0-linux-amd
   mv Slicer-4.4.0-linux-amd64 /opt/slicer
 
 RUN yum install -y mesa-libGLU
+
+COPY /etc /etc
