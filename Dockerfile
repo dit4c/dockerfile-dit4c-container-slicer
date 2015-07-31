@@ -1,11 +1,9 @@
 FROM dit4c/dit4c-container-x11
 MAINTAINER Tim Dettrick <t.dettrick@uq.edu.au>
 
-RUN curl -s -L http://download.slicer.org/bitstream/263262 > \
-    /tmp/Slicer-4.4.0-linux-amd64.tar.gz && \
-  tar xzvf /tmp/Slicer-4.4.0-linux-amd64.tar.gz -C /tmp && \
-  mv /tmp/Slicer-4.4.0-linux-amd64 /opt/slicer && \
-  rm /tmp/Slicer-4.4.0-linux-amd64.tar.gz
+RUN SLICER_URL="http://download.slicer.org/bitstream/263262" && \
+  curl -s -L $SLICER_URL | tar xz -C /tmp && \
+  mv /tmp/Slicer* /opt/slicer
 
 # See http://na-mic.org/Mantis/view.php?id=4015
 RUN mkdir /home/researcher/Documents
@@ -13,8 +11,12 @@ RUN mkdir /home/researcher/Documents
 RUN fsudo yum install -y mesa-libGLU
 
 COPY /etc /etc
+COPY /opt /opt
+
+RUN LNUM=$(sed -n '/launcher_item_app/=' /etc/tint2/panel.tint2rc | head -1) && \
+  sed -i "${LNUM}ilauncher_item_app = /opt/slicer/slicer.desktop" /etc/tint2/panel.tint2rc
 
 # Because COPY doesn't respect USER...
 USER root
-RUN chown -R researcher:researcher /etc
+RUN chown -R researcher:researcher /etc /opt
 USER researcher
