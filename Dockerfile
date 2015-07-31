@@ -1,7 +1,7 @@
 FROM dit4c/dit4c-container-x11
 MAINTAINER Tim Dettrick <t.dettrick@uq.edu.au>
 
-RUN SLICER_URL="http://download.slicer.org/bitstream/263262" && \
+RUN SLICER_URL="http://download.slicer.org/bitstream/403672" && \
   curl -s -L $SLICER_URL | tar xz -C /tmp && \
   mv /tmp/Slicer* /opt/slicer
 
